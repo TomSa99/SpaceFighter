@@ -3,17 +3,27 @@ A video game where you and a friend control a spaceship and have to face each ot
 
 # Controlls
 Player 1 
+  
   -> Up button - move forward
+  
   -> Down button - move back / slowdown
+  
   -> Left button - move to the left
+  
   -> Right button - move to the right
+  
   -> Space bar - shoot
   
 Player 2
+  
   -> W - move forward
+  
   -> S - move back / slowdown
+  
   -> A - move to the left
+  
   -> D - move to the right
+  
   -> Q - shoot
  
 # Disclaimer
