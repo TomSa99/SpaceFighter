@@ -1,8 +1,9 @@
-import pygame, sys
+import pygame
+import sys
 
+from button import Button
 from models2 import Spaceship, Spaceship2
 from utils2 import load_sprite, print_text
-from button import Button
 
 
 class SpaceFighter:
@@ -37,6 +38,8 @@ class SpaceFighter:
                     event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE
             ):
                 quit()
+            elif event.type == pygame.KEYDOWN and event.key == pygame.K_r:
+                main()
 
             elif (
                     self.spaceship
@@ -75,7 +78,6 @@ class SpaceFighter:
                 self.spaceship2.accelerate()
             elif is_key_pressed[pygame.K_s]:
                 self.spaceship2.deaccelerate()
-
     def get_game_objects(self):
         game_objects = [*self.bullets, *self.bullets2]
 
@@ -158,7 +160,7 @@ def main_menu():
 
         MENU_MOUSE_POS = pygame.mouse.get_pos()
 
-        MENU_TEXT = get_font(100).render("SPACE FIGHTER", True, "#b68f40")
+        MENU_TEXT = get_font(90).render("SPACE FIGHTER", True, "#b68f40")
         MENU_RECT = MENU_TEXT.get_rect(center=(640, 100))
 
         PLAY_BUTTON = Button(image=pygame.image.load("assets/sprites/play_rect.png"), pos=(640, 250),

@@ -2,6 +2,10 @@
 A video game where you and a friend control a spaceship and have to face each other in a space battle.
 
 # Controlls
+-> Esc - Close game
+
+-> R - Restart game
+
 Player 1 
   
   -> Up button - move forward
