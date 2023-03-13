@@ -1,4 +1,4 @@
-# SpaceFighter
+# Space Fighter 🚀
 A video game where you and a friend control a spaceship and have to face each other in a space battle.
 
 # Controlls
@@ -30,6 +30,6 @@ Player 2
   
   -> Q - shoot
  
-# Disclaimer
+# Note
 For now, in order to play the game open your command line in SpaceFighter directory and run python space_fighter.
 You might experience some problems, this is just a small project for me to get some experience with pygames so it's not yet perfect, but i do intend to perfection it.
