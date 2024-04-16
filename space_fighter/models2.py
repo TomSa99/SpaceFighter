@@ -2,7 +2,7 @@ import pygame
 from pygame.math import Vector2
 from pygame.transform import rotozoom
 
-from utils2 import load_sprite, load_sound, wrap_position
+from utils2 import load_sprite, load_sound, wrap_position, get_random_velocity
 
 
 class GameObject:
@@ -134,3 +134,8 @@ class Bullet2(GameObject):
 
     def move(self, surface):
         self.position += self.velocity
+
+
+class Asteroid(GameObject):
+    def __init__(self, position):
+        super().__init__(position, load_sprite('Asteroid'), get_random_velocity(1,3))

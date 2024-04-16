@@ -2,11 +2,12 @@ import pygame
 import sys
 
 from button import Button
-from models2 import Spaceship, Spaceship2
-from utils2 import load_sprite, print_text
+from models2 import Spaceship, Spaceship2, Asteroid
+from utils2 import load_sprite, print_text, get_random_position
 
 
 class SpaceFighter:
+    MIN_ASTEROID_DISTANCE = 250
 
     def __init__(self):
         self._init_pygame()
@@ -18,9 +19,24 @@ class SpaceFighter:
 
         self.bullets = []
         self.bullets2 = []
+        self.asteroids = []
         self.spaceship = Spaceship((self.screen.get_size()[0] - 100, self.screen.get_size()[1] / 2),
                                    self.bullets.append)
         self.spaceship2 = Spaceship2((100, self.screen.get_size()[1] / 2), self.bullets2.append)
+
+        for _ in range(6):
+            while True:
+                position = get_random_position(self.screen)
+                if (
+                    position.distance_to(self.spaceship.position) > self.MIN_ASTEROID_DISTANCE
+                ):
+                    break
+                elif(
+                    position.distance_to(self.spaceship2.position) > self.MIN_ASTEROID_DISTANCE
+                ):
+                    break
+
+            self.asteroids.append(Asteroid(position))
 
     def main_loop(self):
         while True:
@@ -79,7 +95,7 @@ class SpaceFighter:
             elif is_key_pressed[pygame.K_s]:
                 self.spaceship2.deaccelerate()
     def get_game_objects(self):
-        game_objects = [*self.bullets, *self.bullets2]
+        game_objects = [*self.bullets, *self.bullets2, *self.asteroids]
 
         if self.spaceship:
             game_objects.append(self.spaceship)
@@ -96,10 +112,19 @@ class SpaceFighter:
         # If both spaceships collide, the game is over
         if self.spaceship and self.spaceship2:
             if self.spaceship.collides_with(self.spaceship2):
-                self.spaceship = None
-                self.spaceship2 = None
+                #self.spaceship = None
+                #self.spaceship2 = None
+                self.message = self.message = 'Game Over!\nClick R to restart.'
+            for asteroid in self.asteroids:
+                if asteroid.collides_with(self.spaceship):
+                    self.spaceship = None
+                    break
+                elif asteroid.collides_with(self.spaceship2):
+                    self.spaceship2 = None
+                    break
+                
 
-        # when the bullet from the spaceship collides with the spaceship2, the spaceship2 is destroyed
+        # when the bullet from the spaceship1 collides with the spaceship2, the spaceship2 is destroyed
         for bullet in self.bullets[:]:
             if bullet.collides_with(self.spaceship2):
                 self.bullets.remove(bullet)
@@ -110,7 +135,7 @@ class SpaceFighter:
             if not self.screen.get_rect().collidepoint(bullet.position):
                 self.bullets.remove(bullet)
 
-        # when the bullet from the spaceship2 collides with the spaceship, the spaceship is destroyed
+        # when the bullet from the spaceship2 collides with the spaceship1, the spaceship1 is destroyed
         for bullet2 in self.bullets2[:]:
             if bullet2.collides_with(self.spaceship):
                 self.bullets2.remove(bullet2)
@@ -122,11 +147,11 @@ class SpaceFighter:
                 self.bullets2.remove(bullet2)
 
         if not self.spaceship2 and self.spaceship:
-            self.message = 'Player1 won!'
+            self.message = 'Player1 won!\nClick R to restart.'
         elif not self.spaceship and self.spaceship2:
-            self.message = 'Player2 won!'
-        elif not self.spaceship and not self.spaceship2:
-            self.message = 'Game Over!'
+            self.message = 'Player2 won!\nClick R to restart.'
+        #elif not self.spaceship and not self.spaceship2:
+            #self.message = 'Game Over!\nClick R to restart.'
 
     def _draw(self):
         self.screen.blit(self.background, (0, 0))
