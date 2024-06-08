@@ -2,6 +2,7 @@
 A video game where you and a friend control a spaceship and have to face each other in a space battle.
 ![image](https://github.com/TomSa99/SpaceFighter/assets/95915840/de9224fc-886b-4862-9fc4-cb2160d845a8)
 
+*TESTING GIT*
 
 # Controlls
 -> Esc - Close game
