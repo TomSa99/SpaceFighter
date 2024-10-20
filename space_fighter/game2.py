@@ -38,10 +38,25 @@ class SpaceFighter:
 
             self.asteroids.append(Asteroid(position))
 
-    def main_loop(self):
+    def main_loop(self,registered_starttime):
+        # set the players as invencible for collisions with asteroids
+        invencible = True
         while True:
+            # get the current time
+            current_time = pygame.time.get_ticks()
+            # calculate the current time since the start of the game in seconds 
+            if ((current_time - registered_starttime)/1000) < 5.1:
+                # if the time difference is less then 5 secs display a countdown
+                self.message = f'Invenciblity for: {int((registered_starttime + 5500 - current_time)/1000)} seconds'
+            else:
+                # otherwise print nothing
+                self.message = ""
+            
+            if (current_time - registered_starttime) > 5000:
+                # as the 5 secs pass the players stop being invencible
+                invencible = False
             self._handle_input()
-            self._process_game_logic()
+            self._process_game_logic(invencible)
             self._draw()
 
     def _init_pygame(self) -> None:
@@ -105,21 +120,23 @@ class SpaceFighter:
 
         return game_objects
 
-    def _process_game_logic(self):
+    def _process_game_logic(self, invencible):
         for game_object in self.get_game_objects():
             game_object.move(self.screen)
 
-        # If both spaceships collide, the game is over
+        
         if self.spaceship and self.spaceship2:
+            # If both spaceships collide, the game is over
             if self.spaceship.collides_with(self.spaceship2):
-                #self.spaceship = None
-                #self.spaceship2 = None
-                self.message = self.message = 'Game Over!\nClick R to restart.'
+                self.spaceship = None
+                self.spaceship2 = None
+                # self.message = 'Game Over!\nClick^^ R to restart.'
             for asteroid in self.asteroids:
-                if asteroid.collides_with(self.spaceship):
+                # if a spaceship collides with an asteroid and they are not invencible they are destroyed
+                if asteroid.collides_with(self.spaceship) and invencible == False:
                     self.spaceship = None
                     break
-                elif asteroid.collides_with(self.spaceship2):
+                elif asteroid.collides_with(self.spaceship2) and invencible == False:
                     self.spaceship2 = None
                     break
                 
@@ -150,8 +167,8 @@ class SpaceFighter:
             self.message = 'Player1 won!\nClick R to restart.'
         elif not self.spaceship and self.spaceship2:
             self.message = 'Player2 won!\nClick R to restart.'
-        #elif not self.spaceship and not self.spaceship2:
-            #self.message = 'Game Over!\nClick R to restart.'
+        elif not self.spaceship and not self.spaceship2:
+            self.message = 'Game Over!\nClick R to restart.'
 
     def _draw(self):
         self.screen.blit(self.background, (0, 0))
@@ -166,8 +183,10 @@ class SpaceFighter:
         self.clock.tick(60)
 
 def main():
+    # time registered at the moment when the player hits "Play"
+    registered_starttime = pygame.time.get_ticks()
     game = SpaceFighter()
-    game.main_loop()
+    game.main_loop(registered_starttime)
 
 def main_menu():
     pygame.init()
